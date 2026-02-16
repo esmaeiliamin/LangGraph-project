@@ -40,5 +40,16 @@ class TripPlannerAgent:
             except:
                 return "No hotels found."
         return "Hotel serach failed."
-    
-          
+
+    def plan_trip(self):
+        print("Planning your trip...\n")
+        flight_info = self.search_flights(self.origin, self.destination, self.departure_date, self.return_date)
+        hotel_info = self.search_hotels(self.destination, self.departure_date, self.return_date)
+        print("Trip Plan:")
+        print(flight_info)
+        print(hotel_info) 
+
+
+if __name__ =="__main__":
+    planner = TripPlannerAgent("DEL", "BOM", "2025-05-31", "2025-06-02")
+    planner.plan_trip()             
