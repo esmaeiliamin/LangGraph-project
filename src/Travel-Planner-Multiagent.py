@@ -1,18 +1,11 @@
 #This code is a simple travel planner that uses the SearchAPI.io to find flights and hotels.
 #It defines two agents: one for searching flights and another for searching hotels.
-
+#Use multi agents patterns.
 
 import requests
 
 SEARCHAPI_KEY="Your API key here."
-
-class TripPlannerAgent:
-    def __init__(self, origin, destination, departure_date, return_date=None):
-        self.origin = origin
-        self.destination = destination
-        self.departure_date = departure_date
-        self.return_date = return_date
-
+class GoogleFlightsAgent:
     def search_flights(self, origin, destination, departure_date, return_date=None):
         url = "https://www.searchapi.io/api/v1/search"
         params = {"engine":"google_flights","flight_type":"round_trip", "departure_id":origin, "arrival_id":destination, "outbound_date": departure_date, "return_date": return_date, "api_key": SEARCHAPI_KEY}
@@ -29,7 +22,9 @@ class TripPlannerAgent:
             except:
                 return "No flights found."
         return "Flight search failed."
+    
 
+class GoogleHotelsAgent:
     def search_hotels(self, city, departure_date, return_date):
         url = "https://www.searchapi.io/api/v1/search"
         city = "Mumbai"
@@ -44,16 +39,17 @@ class TripPlannerAgent:
             except:
                 return "No hotels found."
         return "Hotel serach failed."
+    
 
-    def plan_trip(self):
-        print("Planning your trip...\n")
-        flight_info = self.search_flights(self.origin, self.destination, self.departure_date, self.return_date)
-        hotel_info = self.search_hotels(self.destination, self.departure_date, self.return_date)
-        print("Trip Plan:")
-        print(flight_info)
-        print(hotel_info) 
+class TripPlannerAgent:
+    def __init__(self, origin, destination, departure_date, return_date=None):
+        self.origin = origin
+        self.destination = destination
+        self.departure_date = departure_date
+        self.return_date = return_date
+        self.flight_agent = GoogleFlightsAgent()
+        self.hotel_agent = GoogleHotelsAgent()
 
 
-if __name__ =="__main__":
-    planner = TripPlannerAgent("DEL", "BOM", "2025-05-31", "2025-06-02")
-    planner.plan_trip()             
+        
+            
